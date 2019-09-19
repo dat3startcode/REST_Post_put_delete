@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exception.PersonNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.Context;
@@ -74,9 +75,17 @@ public class PersonResource {
 
 
     @GET
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        return "{}";
+    public String getJson(@PathParam("id")int id) throws PersonNotFoundException {
+        Person p = persons.get(id);
+        if(id == 13){
+            System.out.println(1/0);
+        }
+        if(p==null){
+            throw new PersonNotFoundException("Person with provided id not found");
+        }
+        return gson.toJson(p);
     }
     @GET
     @Path("all")
